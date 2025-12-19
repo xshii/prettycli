@@ -38,11 +38,15 @@ addopts = "-v"
 [tool.coverage.run]
 source = ["src/prettycli"]
 branch = true
+omit = [
+    "src/prettycli/vscode.py",  # Optional module, requires websocket
+]
 
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
     "if __name__ == .__main__.:",
     "raise NotImplementedError",
+    "if not HAS_WEBSOCKET",
 ]
 fail_under = 95
