@@ -125,6 +125,13 @@ Everything looks good!
 """, title="Report")
 
 
+def demo_open_file():
+    """Open a file with system default application."""
+    print("\nTo open files with system default app:")
+    print("  vscode.show_excel('/path/to/file.xlsx')  # Open Excel")
+    print("  vscode.open_file('/path/to/document.pdf')  # Open any file")
+
+
 def check_connection():
     """Check VS Code connection status."""
     label, status = vscode.get_status()
@@ -152,6 +159,7 @@ if __name__ == "__main__":
         demo_json()
         demo_diff()
         demo_markdown()
+        demo_open_file()
 
         print()
         print("All artifacts displayed!")

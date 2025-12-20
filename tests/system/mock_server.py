@@ -89,6 +89,11 @@ class MockVSCodeServer:
                         "id": msg_id,
                         "success": True,
                     }
+                elif action == "open":
+                    response = {
+                        "id": msg_id,
+                        "success": True,
+                    }
                 else:
                     response = {
                         "id": msg_id,

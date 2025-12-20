@@ -506,6 +506,31 @@ class VSCodeClient:
 
         return self.show_table(columns, data_rows, title or path, panel_id)
 
+    def open_file(self, path: str) -> bool:
+        """
+        Open a file with the system default application.
+
+        Args:
+            path: File path to open
+
+        Returns:
+            True if successful
+        """
+        response = self._send("open", artifact={"path": path})
+        return response.get("success", False)
+
+    def show_excel(self, path: str) -> bool:
+        """
+        Open an Excel file with the system default application.
+
+        Args:
+            path: Excel file path (.xlsx, .xls)
+
+        Returns:
+            True if successful
+        """
+        return self.open_file(path)
+
     # ============ Panel Management ============
 
     def close_panel(self, panel_id: str) -> bool:
@@ -596,3 +621,13 @@ def show_web(*args, **kwargs) -> str:
 
 def show_csv(*args, **kwargs) -> str:
     return get_client().show_csv(*args, **kwargs)
+
+
+def show_excel(path: str) -> bool:
+    """Open an Excel file with the system default application."""
+    return get_client().show_excel(path)
+
+
+def open_file(path: str) -> bool:
+    """Open a file with the system default application."""
+    return get_client().open_file(path)

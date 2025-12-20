@@ -415,3 +415,37 @@ class TestVSCodeClientAutoReconnect:
         # Either "Cannot connect" or "attempts" in error message
         error_msg = str(excinfo.value)
         assert "Cannot connect" in error_msg or "attempts" in error_msg
+
+
+class TestVSCodeClientOpenFile:
+    """Test file opening functionality"""
+
+    def test_open_file(self):
+        with MockVSCodeServer(port=19985) as server:
+            client = VSCodeClient(port=19985)
+            client.connect()
+
+            result = client.open_file("/path/to/file.pdf")
+
+            assert result is True
+
+            messages = server.get_messages()
+            assert messages[-1]["action"] == "open"
+            assert messages[-1]["artifact"]["path"] == "/path/to/file.pdf"
+
+            client.disconnect()
+
+    def test_show_excel(self):
+        with MockVSCodeServer(port=19986) as server:
+            client = VSCodeClient(port=19986)
+            client.connect()
+
+            result = client.show_excel("/path/to/data.xlsx")
+
+            assert result is True
+
+            messages = server.get_messages()
+            assert messages[-1]["action"] == "open"
+            assert messages[-1]["artifact"]["path"] == "/path/to/data.xlsx"
+
+            client.disconnect()
