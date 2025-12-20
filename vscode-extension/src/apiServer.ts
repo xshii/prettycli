@@ -155,6 +155,27 @@ export class ApiServer {
                     data: { panels: this.panelManager.list() },
                 };
 
+            case 'open':
+                if (!message.artifact?.path) {
+                    return {
+                        id: message.id,
+                        success: false,
+                        error: 'Missing path',
+                    };
+                }
+                // Open file with system default application
+                vscode.env.openExternal(vscode.Uri.file(message.artifact.path));
+                return {
+                    id: message.id,
+                    success: true,
+                };
+
+            case 'ping':
+                return {
+                    id: message.id,
+                    success: true,
+                };
+
             default:
                 return {
                     id: message.id,
