@@ -141,7 +141,9 @@ class TestCommandCompleter:
         completions = list(completer.get_completions(document, None))
 
         dummy_completion = next(c for c in completions if c.text == "dummy")
-        assert "dummy" in dummy_completion.display_meta
+        # display_meta is FormattedText, convert to string for check
+        meta_text = str(dummy_completion.display_meta)
+        assert "dummy" in meta_text.lower() or "A dummy" in meta_text
 
     def test_argument_type_hint(self, completer):
         """Test that argument completions show type hints."""
@@ -151,4 +153,6 @@ class TestCommandCompleter:
         completions = list(completer.get_completions(document, None))
 
         count_completion = next(c for c in completions if c.text == "--count")
-        assert "int" in count_completion.display_meta
+        # display_meta is FormattedText, convert to string for check
+        meta_text = str(count_completion.display_meta)
+        assert "int" in meta_text
