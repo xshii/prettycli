@@ -42,7 +42,7 @@ class TestSystemStatus:
 
     def test_fallback_quote(self, tmp_path, monkeypatch):
         # Test when quotes file doesn't exist
-        import prettycli.subui.system_status as ss_module
+        import prettycli.subui.widget.system_status as ss_module
 
         monkeypatch.setattr(ss_module, 'QUOTES_FILE', tmp_path / "missing.txt")
 
