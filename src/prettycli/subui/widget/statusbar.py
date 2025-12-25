@@ -2,6 +2,7 @@ from typing import Callable, List, Union, Tuple
 from rich.console import Console
 from rich.text import Text
 
+__all__ = ["StatusBar", "statusbar", "STYLES", "StatusResult"]
 
 # 预定义样式
 STYLES = {

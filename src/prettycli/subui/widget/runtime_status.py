@@ -5,6 +5,8 @@ from rich.console import Console
 from rich.live import Live
 from rich.text import Text
 
+__all__ = ["RuntimeStatus"]
+
 
 class RuntimeStatus:
     """实时状态栏，显示命令执行时长等"""

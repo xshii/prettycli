@@ -2,9 +2,10 @@ from pathlib import Path
 
 from prettycli import ui
 
+__all__ = ["SystemStatus"]
 
 # quotes.txt 在 prettycli 根目录
-QUOTES_FILE = Path(__file__).parent.parent / "quotes.txt"
+QUOTES_FILE = Path(__file__).parent.parent.parent / "quotes.txt"
 
 
 class SystemStatus:

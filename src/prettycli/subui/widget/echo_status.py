@@ -1,5 +1,7 @@
 from prettycli import ui
 
+__all__ = ["EchoStatus"]
+
 
 class EchoStatus:
     """回显状态栏，支持输出压缩/展开"""
