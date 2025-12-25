@@ -167,14 +167,72 @@ prettycli/
 └── tests/               # Test suite
 ```
 
+## Interactive Testing Framework
+
+PrettyCLI includes a testing framework for interactive CLI applications.
+
+### ShellSession - Persistent Shell
+
+```python
+from prettycli.testing import ShellSession
+
+with ShellSession() as sh:
+    sh.run("cd /tmp")
+    result = sh.run("pwd")  # /tmp - state persists!
+
+    sh.export("MY_VAR", "hello")
+    print(sh.env("MY_VAR"))  # hello
+
+    # Check exit codes
+    result = sh.run("ls /nonexistent")
+    print(result.exit_code)  # non-zero
+```
+
+### Mock Prompts
+
+```python
+from prettycli.testing import mock_prompt, test, TestRunner
+
+@test("should greet user")
+def test_greet():
+    with mock_prompt(["Alice"]):  # Simulate user input
+        result = my_prompt_function()
+        assert "Alice" in result
+
+# Run tests
+runner = TestRunner()
+runner.discover(Path("tests/"))
+runner.run()  # Returns 0 if all pass
+```
+
+### Assertions
+
+```python
+from prettycli.testing import assert_contains, assert_matches, assert_equals
+
+assert_contains(output, "success")
+assert_matches(output, r"ID: \d+")
+assert_equals(result.exit_code, 0)
+```
+
+### Interactive Mode
+
+```bash
+# Run with interactive debugging (pause on failure)
+python tests/test_shell_session.py -i
+```
+
 ## Development
 
 ```bash
 # Install dev dependencies
 pip install -e ".[dev,vscode]"
 
-# Run Python tests
+# Run pytest tests
 pytest
+
+# Run interactive tests
+python tests/test_shell_session.py
 
 # Run TypeScript tests
 cd vscode-extension && npm test
