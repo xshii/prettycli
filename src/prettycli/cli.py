@@ -22,10 +22,11 @@ import yaml
 from prompt_toolkit import PromptSession
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.completion import Completer, Completion
+from prompt_toolkit.formatted_text import HTML
 
 from prettycli.command import BaseCommand
 from prettycli.context import Context
-from prettycli.subui import statusbar, SystemStatus, RuntimeStatus, EchoStatus
+from prettycli.subui import RuntimeStatus, EchoStatus, TopToolbar, BottomToolbar
 from prettycli import ui
 from prettycli import vscode
 
@@ -149,12 +150,13 @@ class CLI:
         self.ctx = Context()
         self._commands: Dict[str, BaseCommand] = {}
         self._config = self._load_config(config_path)
-        self._system_status = SystemStatus()
         self._runtime_status = RuntimeStatus()
         self._echo_status = EchoStatus()
 
-        # Register vscode status provider
-        statusbar.register(vscode.get_status)
+        # 固定工具栏
+        self._top_toolbar = TopToolbar(name)
+        self._top_toolbar.register(vscode.get_status)
+        self._bottom_toolbar = BottomToolbar()
 
     def _load_config(self, config_path: Optional[Path]) -> dict:
         """加载配置"""
@@ -335,11 +337,12 @@ class CLI:
             key_bindings=bindings,
             completer=completer,
             complete_while_typing=False,  # Only complete on Tab
+            rprompt=self._top_toolbar,  # 顶部状态栏（显示在右侧）
+            bottom_toolbar=self._bottom_toolbar,  # 底部每日一句
         )
 
         while True:
             try:
-                statusbar.show()
                 line = session.prompt(self.prompt).strip()
 
                 if not line:
@@ -372,7 +375,6 @@ class CLI:
                         self._run_bash(line)
 
                 self._runtime_status.show()
-                self._system_status.show()
                 ui.print()
 
             except KeyboardInterrupt:
