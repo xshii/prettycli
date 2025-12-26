@@ -6,6 +6,13 @@ from prompt_toolkit.formatted_text import HTML
 
 __all__ = ["TopToolbar"]
 
+# 样式映射：prompt_toolkit -> rich
+STYLE_MAP = {
+    "success": "green",
+    "warning": "yellow",
+    "error": "red",
+}
+
 StatusResult = Union[str, Tuple[str, str], None]
 
 
@@ -65,6 +72,34 @@ class TopToolbar:
                 pass
 
         return HTML(" <style fg='ansibrightblack'>|</style> ".join(parts))
+
+    def render_rich(self) -> str:
+        """渲染为 rich 格式字符串"""
+        parts = []
+
+        # 应用名称
+        parts.append(f"[bold]{self._app_name}[/]")
+
+        # Python 版本
+        parts.append(f"Py{platform.python_version()}")
+
+        # 动态状态提供者
+        for provider in self._providers:
+            try:
+                result = provider()
+                if not result:
+                    continue
+
+                if isinstance(result, tuple):
+                    text, style = result
+                    color = STYLE_MAP.get(style, "default")
+                    parts.append(f"[{color}]{text}[/]")
+                else:
+                    parts.append(result)
+            except Exception:
+                pass
+
+        return "[dim]|[/] ".join(parts)
 
     def __call__(self):
         """prompt_toolkit toolbar 回调"""

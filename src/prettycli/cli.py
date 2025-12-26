@@ -335,12 +335,13 @@ class CLI:
             key_bindings=bindings,
             completer=completer,
             complete_while_typing=False,  # Only complete on Tab
-            rprompt=self._top_toolbar,  # 顶部状态栏（显示在右侧）
             bottom_toolbar=self._bottom_toolbar,  # 底部每日一句
         )
 
         while True:
             try:
+                # 显示顶部状态栏
+                ui.print(self._top_toolbar.render_rich())
                 line = session.prompt(self.prompt).strip()
 
                 if not line:
